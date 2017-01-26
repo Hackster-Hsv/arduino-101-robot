@@ -164,6 +164,16 @@ BLYNK_WRITE(V4)
   }
 }  
 
+// Emergency stop
+BLYNK_WRITE(V10)
+{
+  Serial.println("Stopping all motors...");
+  motor1->run(RELEASE);
+  motor2->run(RELEASE);
+  motor3->run(RELEASE);
+  motor4->run(RELEASE);    
+}  
+
 BLYNK_READ(V5)
 {
   Blynk.virtualWrite(5, 1);
