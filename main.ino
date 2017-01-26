@@ -5,6 +5,11 @@
 #include <Adafruit_MotorShield.h>
 #include "utility/Adafruit_MS_PWMServoDriver.h"
 
+// Setup time section for polling connection
+#include <Time.h>
+#include <TimeLib.h>
+int lastPoll = Time.now();
+
 // You should get Auth Token in the Blynk App.
 // Go to the Project Settings (nut icon).
 char auth[] = "1b393b0f3f4f4245ba98929f225fa9cb";
@@ -53,6 +58,12 @@ void setup() {
 void loop() {
   Blynk.run();
   blePeripheral.poll();
+  if (Time.now() - lastPoll > 3) {
+    motor1->run(RELEASE);
+    motor2->run(RELEASE);
+    motor3->run(RELEASE);
+    motor4->run(RELEASE);
+  }
 }
 
 
@@ -115,6 +126,7 @@ BLYNK_WRITE(V2)
 
 // Turn left
 BLYNK_WRITE(V3)
+{
   int pinValue = param.asInt(); // assigning incoming value from pin V1 to a variable
   Serial.print("Motor 1 Forward: ");
   Serial.println(pinValue);
@@ -134,6 +146,7 @@ BLYNK_WRITE(V3)
 
 // Turn right
 BLYNK_WRITE(V4)
+{
   int pinValue = param.asInt(); // assigning incoming value from pin V1 to a variable
   Serial.print("Motor 1 Forward: ");
   Serial.println(pinValue);
@@ -150,3 +163,9 @@ BLYNK_WRITE(V4)
     motor4->run(RELEASE);    
   }
 }  
+
+BLYNK_READ(V5)
+{
+  Blynk.virtualWrite(5, 1);
+  lastPoll = Time.now();
+}
