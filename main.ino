@@ -8,7 +8,7 @@
 // Setup time section for polling connection
 #include <Time.h>
 #include <TimeLib.h>
-int lastPoll = Time.now();
+int lastPoll = now();
 
 // You should get Auth Token in the Blynk App.
 // Go to the Project Settings (nut icon).
@@ -58,7 +58,7 @@ void setup() {
 void loop() {
   Blynk.run();
   blePeripheral.poll();
-  if (Time.now() - lastPoll > 3) {
+  if (now() - lastPoll > 3) {
     motor1->run(RELEASE);
     motor2->run(RELEASE);
     motor3->run(RELEASE);
@@ -87,7 +87,7 @@ BLYNK_WRITE(V0)
 // Move forward
 BLYNK_WRITE(V1)
 {
-  int pinValue = param.isInt();
+  int pinValue = param.asInt();
   Serial.print("All motors forward: ");
   Serial.println(pinValue);
   if(pinValue == 1) {
@@ -107,7 +107,7 @@ BLYNK_WRITE(V1)
 // Move backward
 BLYNK_WRITE(V2)
 {
-  int pinValue = param.isInt();
+  int pinValue = param.asInt();
   Serial.print("All motors backward: ");
   Serial.println(pinValue);
   if(pinValue == 1) {
@@ -167,5 +167,5 @@ BLYNK_WRITE(V4)
 BLYNK_READ(V5)
 {
   Blynk.virtualWrite(5, 1);
-  lastPoll = Time.now();
+  lastPoll = now();
 }
